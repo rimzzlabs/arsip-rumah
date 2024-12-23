@@ -2,7 +2,7 @@ import { GlobalHeader } from '@/components/header'
 
 import { SessionProvider } from 'next-auth/react'
 
-export default function Home() {
+export default function HomePage() {
   return (
     <SessionProvider>
       <GlobalHeader />

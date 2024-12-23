@@ -16,8 +16,8 @@ export function verifyCredentials(email: string) {
     let checkPassword = comparePassword(password)
     const [error, data] = await getUserByEmail(email)
 
-    if (error) return ['server error', null] as const
-    if (!data) return ['user not found', null] as const
+    if (error === 'server error') return ['server error', null] as const
+    if (error === 'user not found' || !data) return ['user not found', null] as const
 
     let isMatch = await checkPassword(data.password)
     if (!isMatch) return ['invalid credentials', null] as const

@@ -18,7 +18,6 @@ import { AuthTitle } from './AuthTitle'
 import { AuthWrapper } from './AuthWrapper'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { BookTypeIcon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import { useAction } from 'next-safe-action/hooks'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -63,10 +62,7 @@ export function AuthSignInForm() {
 
   return (
     <AuthWrapper>
-      <AuthTitle>
-        <BookTypeIcon size='1em' className='mx-auto' />
-        Masuk Ke Aplikasi
-      </AuthTitle>
+      <AuthTitle>Masuk Ke Aplikasi</AuthTitle>
 
       <Form {...form}>
         <form onSubmit={onSubmit} className='grid gap-5'>

@@ -1,12 +1,9 @@
-import { Loader2Icon } from 'lucide-react'
+import { LoadingPage } from '@/components/loading-page'
 
-export default function GlobalLoading() {
+export default function LoadingGlobalPage() {
   return (
-    <section className='grid min-h-screen place-items-center py-10'>
-      <div className='flex flex-col items-center justify-center gap-2 text-center'>
-        <Loader2Icon size='1.25rem' className='animate-spin' />
-        <span className='text-sm font-medium'>Memproses permintaan</span>
-      </div>
-    </section>
+    <LoadingPage>
+      <p className='text-sm font-medium'>Memproses permintaan</p>
+    </LoadingPage>
   )
 }
