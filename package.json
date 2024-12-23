@@ -93,6 +93,15 @@
     }
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,mdx,md,css}": "pnpm format"
+    "*.css": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "!(*.css|*.js|*.jsx)": [
+      "prettier --write"
+    ]
   }
 }
