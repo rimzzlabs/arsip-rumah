@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Akun saya',
 }
 
-export default async function UserPageLayout(props: React.PropsWithChildren) {
+export default async function LayoutAccountPage(props: React.PropsWithChildren) {
   let session = await auth()
 
   return <PrivateWrapper session={session}>{props.children}</PrivateWrapper>

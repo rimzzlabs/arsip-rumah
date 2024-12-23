@@ -19,7 +19,6 @@ import { AuthTitle } from './AuthTitle'
 import { AuthWrapper } from './AuthWrapper'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { BookTypeIcon } from 'lucide-react'
 import { useAction } from 'next-safe-action/hooks'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
@@ -61,10 +60,7 @@ export function AuthSignUpForm() {
 
   return (
     <AuthWrapper>
-      <AuthTitle>
-        <BookTypeIcon size='1em' className='mx-auto' />
-        Daftar Ke Aplikasi
-      </AuthTitle>
+      <AuthTitle>Daftar Ke Aplikasi</AuthTitle>
 
       <Form {...form}>
         <form onSubmit={onSubmit} className='grid gap-5'>
