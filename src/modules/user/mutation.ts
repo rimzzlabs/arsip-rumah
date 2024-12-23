@@ -32,8 +32,10 @@ export async function createUser(payload: SignUpSchema) {
   } catch (error) {
     pipe('createUser L:26', logError(error))
 
-    if (error instanceof LibsqlError && error.code === 'SQLITE_CONSTRAINT') {
-      return ['email already registered', null] as const
+    if (error instanceof LibsqlError) {
+      if (error.code === 'SQLITE_CONSTRAINT' || error.code === 'PROXY_ERROR') {
+        return ['email already registered', null] as const
+      }
     }
 
     return ['server error', null] as const
@@ -47,8 +49,10 @@ export async function updateUser(payload: UpdateAccountSchema) {
     return [null, payload.userId] as const
   } catch (error) {
     pipe('updateUser L:48', logError(error))
-    if (error instanceof LibsqlError && error.code === 'SQLITE_CONSTRAINT') {
-      return ['email already registered', null] as const
+    if (error instanceof LibsqlError) {
+      if (error.code === 'SQLITE_CONSTRAINT' || error.code === 'PROXY_ERROR') {
+        return ['email already registered', null] as const
+      }
     }
 
     return ['server error', null] as const
