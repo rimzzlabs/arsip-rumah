@@ -9,4 +9,5 @@ export const USER_SCHEMA = sqliteTable('user', {
   password: text('password').notNull(),
   emailVerified: integer('email_verified', { mode: 'timestamp_ms' }),
   image: text('image'),
+  salt: text('salt').notNull(),
 })
