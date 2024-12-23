@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 export function PrivateHeader() {
   return (
-    <header className='fixed inset-x-0 top-0 border-b'>
+    <header className='fixed inset-x-0 top-0 z-50 border-b bg-background'>
       <div className='mx-auto flex h-16 w-11/12 max-w-4xl items-center justify-between'>
         <nav className='inline-flex items-center gap-x-2'>
           <Button variant='ghost' size='sm' asChild>
