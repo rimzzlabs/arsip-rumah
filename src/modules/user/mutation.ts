@@ -8,6 +8,7 @@ import { USER_SCHEMA } from '../database/schema'
 
 import { LibsqlError } from '@libsql/client'
 import { D, pipe } from '@mobily/ts-belt'
+import crypto from 'crypto'
 import { eq } from 'drizzle-orm'
 import { tryit } from 'radash'
 
@@ -15,11 +16,14 @@ export async function createUser(payload: SignUpSchema) {
   const [error, password] = await tryit(hashPassword)(payload.password)
   if (error) return ['failed to hash password', null] as const
 
+  let salt = crypto.randomBytes(16).toString('hex')
+
   try {
     await DB.insert(USER_SCHEMA).values({
+      salt,
+      password,
       email: payload.email,
       name: payload.name,
-      password,
     })
 
     let data = pipe(payload, D.deleteKey('password'))

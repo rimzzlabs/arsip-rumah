@@ -23,7 +23,7 @@ export function PrivateSheet() {
       </SheetTrigger>
 
       <SheetContent side='right' className='px-0'>
-        <SheetHeader>
+        <SheetHeader className='px-4'>
           <SheetTitle>Menu Aplikasi</SheetTitle>
           <SheetDescription className='sr-only'>Akses halaman menu</SheetDescription>
         </SheetHeader>

@@ -52,6 +52,7 @@ export const AUTH_CONFIG = {
       args.session.user.image = res.image
       args.session.user.name = res.name
       args.session.user.email = res.email
+      args.session.user.salt = res.salt
       return args.session
     },
   },

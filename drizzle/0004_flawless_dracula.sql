@@ -1,0 +1,1 @@
+ALTER TABLE `bill` ADD `label_type` text NOT NULL;
