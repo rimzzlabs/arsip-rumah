@@ -12,7 +12,9 @@ import { Loader2Icon } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 
-export function AccountTabInfo() {
+type AccountTabInfoProps = { billsCount: number }
+
+export function AccountTabInfo(props: AccountTabInfoProps) {
   let session = useSession({ required: true })
 
   if (session.status !== 'authenticated') {
@@ -29,7 +31,7 @@ export function AccountTabInfo() {
   const USER_MAP = [
     { key: 'name', label: 'Nama Lengkap', value: name },
     { key: 'email', label: 'Alamat surel', value: email },
-    { key: 'archiveCount', label: 'Jumlah Arsip', value: 9 },
+    { key: 'billsCount', label: 'Jumlah Daftar Tagihan', value: props.billsCount },
   ]
 
   let avatar = generateAvatar(email).toDataUri()

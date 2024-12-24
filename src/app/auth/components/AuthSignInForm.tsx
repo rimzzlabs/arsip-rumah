@@ -54,9 +54,11 @@ export function AuthSignInForm() {
 
     toast.success('Berhasil masuk')
     await session.update()
+    toast.dismiss()
 
+    toast.info('Mengalihkan halaman')
     startTransition(() => {
-      router.push('/account')
+      router.push('/dashboard')
     })
   })
 
