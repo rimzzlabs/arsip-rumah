@@ -1,25 +1,20 @@
-import type { CreateBillSchema, DeleteBillSchema } from '@/app/bills/schema'
+import type { CreateBillSchema, DeleteBillSchema, UpdateBillSchema } from '@/app/bills/schema'
 import { logError } from '@/lib/logger'
 
-import { comparePassword } from '../auth/lib'
 import { DB } from '../database'
 import { BILL_SCHEMA } from '../database/schema'
-import { deriveKeyFromPassword, encrypt } from '../encryptor'
-import { getUserById } from '../user/query'
+import { encrypt } from '../encryptor'
+import { getUserKey } from './utils'
 
 import { pipe } from '@mobily/ts-belt'
 import { and, eq } from 'drizzle-orm'
 
 export async function createBill(payload: CreateBillSchema) {
-  let checkPassword = comparePassword(payload.password)
+  let getKey = getUserKey(payload.password)
 
-  let [error, user] = await getUserById(payload.userId)
-  if (error || !user) return [error, null] as const
+  const [error, key] = await getKey(payload.userId)
+  if (!key) return [error, null]
 
-  let isValidPassword = await checkPassword(user.password)
-  if (!isValidPassword) return ['invalid password', null] as const
-
-  let key = pipe(user.salt, deriveKeyFromPassword(user.password))
   let billName = pipe(key, encrypt(payload.billName))
   let billNumber = pipe(key, encrypt(payload.billNumber))
 
@@ -37,7 +32,7 @@ export async function createBill(payload: CreateBillSchema) {
 
     return [null, 'success'] as const
   } catch (error) {
-    pipe('createBill L:40', logError(error))
+    pipe('createBill L:35', logError(error))
 
     return ['server error', null] as const
   }
@@ -51,7 +46,36 @@ export async function deleteBill(payload: DeleteBillSchema) {
 
     return [null, 'success'] as const
   } catch (error) {
-    pipe('deleteBill L:54', logError(error))
+    pipe('deleteBill L:49', logError(error))
+
+    return ['server error', null] as const
+  }
+}
+
+export async function updateBill(payload: UpdateBillSchema) {
+  let getKey = getUserKey(payload.password)
+
+  const [error, key] = await getKey(payload.userId)
+  if (!key) return [error, null]
+
+  let billName = pipe(key, encrypt(payload.billName))
+  let billNumber = pipe(key, encrypt(payload.billNumber))
+
+  try {
+    await DB.update(BILL_SCHEMA).set({
+      billName: billName.encrypted,
+      billNameIv: billName.iv,
+      billNameAuthTag: billName.authTag,
+      billNumber: billNumber.encrypted,
+      billNumberIv: billNumber.iv,
+      billNumberAuthTag: billNumber.authTag,
+      billType: payload.billType,
+    })
+
+    return [null, 'success'] as const
+  } catch (error) {
+    pipe('deleteBill L:75', logError(error))
+
     return ['server error', null] as const
   }
 }

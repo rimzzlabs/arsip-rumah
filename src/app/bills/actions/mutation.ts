@@ -1,8 +1,8 @@
 'use server'
 
-import { createBill, deleteBill } from '@/modules/bill/mutation'
+import { createBill, deleteBill, updateBill } from '@/modules/bill/mutation'
 
-import { createBillSchema, deleteBillSchema } from '../schema'
+import { createBillSchema, deleteBillSchema, updateBillSchema } from '../schema'
 
 import { createSafeActionClient } from 'next-safe-action'
 import { revalidatePath } from 'next/cache'
@@ -33,4 +33,22 @@ export const deleteBillAction = createSafeActionClient()
 
     revalidatePath('/bills')
     return [null, payload] as const
+  })
+
+export const updateBillAction = createSafeActionClient()
+  .schema(updateBillSchema)
+  .action(async (args) => {
+    let payload = args.parsedInput
+
+    const [error] = await updateBill(payload)
+
+    if (error) {
+      if (error === 'invalid password') return ['Kata sandi tidak valid', null] as const
+
+      return ['Terjadi kesalahan pada server', null] as const
+    }
+
+    revalidatePath('/bills')
+
+    return [null, payload.billId]
   })

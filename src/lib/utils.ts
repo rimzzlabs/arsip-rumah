@@ -26,3 +26,7 @@ export function numericOnChange(onChange: (...args: Array<any>) => void) {
     onChange(event)
   }
 }
+
+export function preventDefault<E extends Event>(e: E) {
+  e.preventDefault()
+}
