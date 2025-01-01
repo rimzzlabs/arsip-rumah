@@ -16,3 +16,13 @@ export const deleteBillSchema = z.object({
   userId: z.string().min(1, ZOD_DICT.REQUIRED),
   billId: z.string().min(1, ZOD_DICT.REQUIRED),
 })
+
+export type UpdateBillSchema = z.infer<typeof updateBillSchema>
+export const updateBillSchema = z.object({
+  userId: z.string().min(1, ZOD_DICT.REQUIRED),
+  billId: z.string().min(1, ZOD_DICT.REQUIRED),
+  billName: z.string().min(1, ZOD_DICT.REQUIRED),
+  billNumber: z.string().min(1, ZOD_DICT.REQUIRED),
+  password: z.string().min(1, ZOD_DICT.REQUIRED),
+  billType: z.string().min(1, ZOD_DICT.REQUIRED),
+})
