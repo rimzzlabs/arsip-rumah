@@ -22,7 +22,7 @@ type BillListItemUpdateProps = Pick<
 
 export function BillListItemUpdate(props: BillListItemUpdateProps) {
   return (
-    <Drawer>
+    <Drawer repositionInputs={false}>
       <DrawerTrigger asChild>
         <DropdownMenuItem onSelect={preventDefault} className='text-sm'>
           <PenBoxIcon size='0.875rem' />

@@ -24,7 +24,7 @@ export function DashboardRecentBills(props: DashboardRecentBillsProps) {
           .with(true, () => (
             <BillListPlaceholder
               className='h-72 text-balance'
-              label='Waduh, dari sabang sampai merauke, kamu nampaknya belum membuat daftar tagihan satupun.'
+              label='Waduh, dari Sabang sampai Merauke, kamu nampaknya belum membuat daftar tagihan satupun.'
             />
           ))
           .with(false, () => (
