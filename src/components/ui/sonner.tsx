@@ -11,7 +11,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       richColors
-      closeButton
+      pauseWhenPageIsHidden
       position='top-center'
       className='toaster group'
       theme={theme as ToasterProps['theme']}

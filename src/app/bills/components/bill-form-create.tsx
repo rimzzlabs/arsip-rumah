@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/form'
 import { Input, InputPassword } from '@/components/ui/input'
 
+import { getActionToast } from '@/constant/toast'
 import { numericOnChange } from '@/lib/utils'
 
 import { createBillAction } from '../actions'
@@ -45,6 +46,7 @@ export function BillFormCreate(props: CreateBillFormProps) {
   })
 
   let onSubmit = form.handleSubmit(async (values) => {
+    toast.dismiss()
     toast.loading('Memproses, harap tunggu')
     let res = await action.executeAsync(values)
     toast.dismiss()
@@ -64,7 +66,10 @@ export function BillFormCreate(props: CreateBillFormProps) {
 
     form.reset()
     closeForm(false)
-    toast.success('Berhasil menyimpan informasi tagihan')
+    let toastId = toast.success(
+      'Berhasil menyimpan informasi tagihan',
+      getActionToast(() => toastId),
+    )
   })
 
   return (

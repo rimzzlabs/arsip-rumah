@@ -13,23 +13,23 @@ import {
 } from '@/components/ui/drawer'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
+import { getActionToast } from '@/constant/toast'
 import { preventDefault } from '@/lib/utils'
 
 import { deleteBillAction } from '../actions'
 import type { DeleteBillSchema } from '../schema'
-import { billItemDropdownAtom } from './bill-list-item-dropdown-menu'
 
-import { useSetAtom } from 'jotai'
 import { TrashIcon } from 'lucide-react'
 import { useAction } from 'next-safe-action/hooks'
 import { toast } from 'sonner'
 
-export function BillListItemDelete(props: DeleteBillSchema) {
+type BillListItemDeleteProps = DeleteBillSchema & { onClose: () => void }
+
+export function BillListItemDelete(props: BillListItemDeleteProps) {
   let action = useAction(deleteBillAction)
-  let closeDropdown = useSetAtom(billItemDropdownAtom)
 
   let onClickDelete = (payload: DeleteBillSchema) => async () => {
-    closeDropdown(false)
+    props.onClose()
     let res = await action.executeAsync(payload)
     if (res?.serverError) toast.error('Terjadi kesalahan pada server')
     if (res?.validationErrors || res?.bindArgsValidationErrors) {
@@ -39,7 +39,10 @@ export function BillListItemDelete(props: DeleteBillSchema) {
     let [error] = res?.data || [null]
     if (error) toast.error(error)
 
-    toast.success('Berhasil menghapus daftar transaksi')
+    let toastId = toast.success(
+      'Berhasil menghapus daftar transaksi',
+      getActionToast(() => toastId),
+    )
   }
 
   return (
@@ -64,7 +67,7 @@ export function BillListItemDelete(props: DeleteBillSchema) {
 
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button onClick={() => closeDropdown(false)} variant='outline'>
+            <Button onClick={props.onClose} variant='outline'>
               Batalkan
             </Button>
           </DrawerClose>

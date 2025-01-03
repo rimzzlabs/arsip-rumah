@@ -12,29 +12,27 @@ import {
 } from '@/components/ui/form'
 import { Input, InputPassword } from '@/components/ui/input'
 
+import { getActionToast } from '@/constant/toast'
 import { numericOnChange } from '@/lib/utils'
 
 import { updateBillAction } from '../actions'
 import type { UpdateBillSchema } from '../schema'
 import { updateBillSchema } from '../schema'
 import { BillFormCreateListType } from './bill-form-create-list-type'
-import { billItemDropdownAtom } from './bill-list-item-dropdown-menu'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { B, pipe } from '@mobily/ts-belt'
-import { useSetAtom } from 'jotai'
 import { useAction } from 'next-safe-action/hooks'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
-type BillFormUpdateProps = Pick<
+type BillFormUpdateProps = { onClose: () => void } & Pick<
   UpdateBillSchema,
   'billId' | 'billName' | 'billNumber' | 'billType' | 'userId'
 >
 
 export function BillFormUpdate(props: BillFormUpdateProps) {
   let action = useAction(updateBillAction)
-  let closeDropdown = useSetAtom(billItemDropdownAtom)
   let form = useForm<UpdateBillSchema>({
     defaultValues: { ...props, password: '' },
     resolver: zodResolver(updateBillSchema),
@@ -55,7 +53,8 @@ export function BillFormUpdate(props: BillFormUpdateProps) {
   )
 
   let onSubmit = form.handleSubmit(async (values) => {
-    closeDropdown(false)
+    toast.dismiss()
+    props.onClose()
     toast.loading('Memproses, harap tunggu')
     let res = await action.executeAsync(values)
     toast.dismiss()
@@ -74,7 +73,10 @@ export function BillFormUpdate(props: BillFormUpdateProps) {
     }
 
     form.reset()
-    toast.success('Berhasil menyimpan informasi tagihan')
+    let toastId = toast.success(
+      'Berhasil menyimpan informasi tagihan',
+      getActionToast(() => toastId),
+    )
   })
 
   return (

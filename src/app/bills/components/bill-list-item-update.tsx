@@ -15,7 +15,7 @@ import { BillFormUpdate } from './bill-form-update'
 
 import { PenBoxIcon } from 'lucide-react'
 
-type BillListItemUpdateProps = Pick<
+type BillListItemUpdateProps = { onClose: () => void } & Pick<
   UpdateBillSchema,
   'billId' | 'billName' | 'billNumber' | 'billType' | 'userId'
 >
