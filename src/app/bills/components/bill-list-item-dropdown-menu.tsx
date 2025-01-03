@@ -7,27 +7,23 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { atomWithToggle } from '@/lib/state'
-
 import { deleteBillAction, updateBillAction } from '../actions'
 import type { DeleteBillSchema, UpdateBillSchema } from '../schema'
 import { BillListItemDelete } from './bill-list-item-delete'
 import { BillListItemUpdate } from './bill-list-item-update'
 
 import { B, pipe } from '@mobily/ts-belt'
-import { useAtom } from 'jotai'
 import { MoreVerticalIcon } from 'lucide-react'
 import { useAction } from 'next-safe-action/hooks'
+import { useState } from 'react'
 
 type BillListItemDropdownMenuProps = DeleteBillSchema &
   Pick<UpdateBillSchema, 'billName' | 'billNumber' | 'billType'>
 
-export const billItemDropdownAtom = atomWithToggle(false)
-
 export function BillListItemDropdownMenu(props: BillListItemDropdownMenuProps) {
   let deleteAction = useAction(deleteBillAction)
   let updateAction = useAction(updateBillAction)
-  let [open, setOpen] = useAtom(billItemDropdownAtom)
+  let [open, setOpen] = useState(false)
 
   let isPending = pipe(
     deleteAction.isExecuting,
@@ -37,6 +33,8 @@ export function BillListItemDropdownMenu(props: BillListItemDropdownMenuProps) {
     B.or(updateAction.isPending),
     B.or(updateAction.isTransitioning),
   )
+
+  let onClose = () => setOpen(false)
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -56,10 +54,10 @@ export function BillListItemDropdownMenu(props: BillListItemDropdownMenuProps) {
             billName={props.billName}
             billNumber={props.billNumber}
             billType={props.billType}
-            key={props.billId}
+            onClose={onClose}
           />
 
-          <BillListItemDelete billId={props.billId} userId={props.userId} />
+          <BillListItemDelete onClose={onClose} billId={props.billId} userId={props.userId} />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

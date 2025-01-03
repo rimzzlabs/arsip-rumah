@@ -10,11 +10,11 @@ export function BillList(props: { bills: GetBills }) {
   if (!props?.bills || props?.bills?.length === 0) return <BillListPlaceholder />
 
   return (
-    <section className='py-4'>
+    <section className='grid gap-x-2.5 gap-y-4 py-4 lg:grid-cols-2'>
       <For
         each={props.bills}
         render={([billType, bills]) => (
-          <div className='py-4' key={billType}>
+          <div key={billType}>
             <h2 className='mb-3 text-xl font-semibold'>
               {DICT_BILL_TYPES[billType].emoji} {DICT_BILL_TYPES[billType].label}
             </h2>

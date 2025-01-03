@@ -62,15 +62,17 @@ export async function updateBill(payload: UpdateBillSchema) {
   let billNumber = pipe(key, encrypt(payload.billNumber))
 
   try {
-    await DB.update(BILL_SCHEMA).set({
-      billName: billName.encrypted,
-      billNameIv: billName.iv,
-      billNameAuthTag: billName.authTag,
-      billNumber: billNumber.encrypted,
-      billNumberIv: billNumber.iv,
-      billNumberAuthTag: billNumber.authTag,
-      billType: payload.billType,
-    })
+    await DB.update(BILL_SCHEMA)
+      .set({
+        billName: billName.encrypted,
+        billNameIv: billName.iv,
+        billNameAuthTag: billName.authTag,
+        billNumber: billNumber.encrypted,
+        billNumberIv: billNumber.iv,
+        billNumberAuthTag: billNumber.authTag,
+        billType: payload.billType,
+      })
+      .where(and(eq(BILL_SCHEMA.userId, payload.userId), eq(BILL_SCHEMA.id, payload.billId)))
 
     return [null, 'success'] as const
   } catch (error) {
