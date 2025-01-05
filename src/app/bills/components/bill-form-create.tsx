@@ -18,7 +18,7 @@ import { numericOnChange } from '@/lib/utils'
 import { createBillAction } from '../actions'
 import type { CreateBillSchema } from '../schema'
 import { createBillSchema } from '../schema'
-import { drawerCreateBillAtom } from '../state'
+import { dialogCreateBillAtom, drawerCreateBillAtom } from '../state'
 import { BillFormCreateListType } from './bill-form-create-list-type'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -33,7 +33,8 @@ type CreateBillFormProps = {
 
 export function BillFormCreate(props: CreateBillFormProps) {
   let action = useAction(createBillAction)
-  let closeForm = useSetAtom(drawerCreateBillAtom)
+  let closeDrawer = useSetAtom(drawerCreateBillAtom)
+  let closeDialog = useSetAtom(dialogCreateBillAtom)
   let form = useForm<CreateBillSchema>({
     defaultValues: {
       userId: props.userId,
@@ -65,7 +66,8 @@ export function BillFormCreate(props: CreateBillFormProps) {
     }
 
     form.reset()
-    closeForm(false)
+    closeDialog(false)
+    closeDrawer(false)
     let toastId = toast.success(
       'Berhasil menyimpan informasi tagihan',
       getActionToast(() => toastId),
@@ -100,8 +102,8 @@ export function BillFormCreate(props: CreateBillFormProps) {
               <FormControl>
                 <Input
                   {...field}
+                  inputMode='numeric'
                   placeholder='123456789'
-                  inputMode='decimal'
                   onChange={numericOnChange(field.onChange)}
                 />
               </FormControl>
@@ -124,8 +126,23 @@ export function BillFormCreate(props: CreateBillFormProps) {
           )}
         />
 
-        <DrawerFooter className='px-0'>
-          <Button disabled={form.formState.isSubmitting} type='submit' size='lg' className='w-full'>
+        <DrawerFooter className='px-0 md:grid md:grid-cols-2 md:gap-2'>
+          <Button
+            size='lg'
+            type='button'
+            variant='secondary'
+            className='max-md:hidden'
+            onClick={() => closeDialog()}
+          >
+            Batalkan
+          </Button>
+
+          <Button
+            size='lg'
+            type='submit'
+            className='max-md:w-full'
+            disabled={form.formState.isSubmitting}
+          >
             Buat tagihan
           </Button>
         </DrawerFooter>

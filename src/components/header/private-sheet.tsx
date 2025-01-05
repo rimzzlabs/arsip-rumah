@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -11,25 +13,30 @@ import {
 import { PrivateNavbar } from './private-navbar'
 
 import { AlignJustifyIcon } from 'lucide-react'
+import { Fragment } from 'react'
 
 export function PrivateSheet() {
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant='ghost'>
-          <AlignJustifyIcon />
-          <span className='sr-only'>Menu</span>
-        </Button>
-      </SheetTrigger>
+    <Fragment>
+      <PrivateNavbar renderAsButton />
 
-      <SheetContent side='right' className='px-0'>
-        <SheetHeader className='px-4'>
-          <SheetTitle>Menu Aplikasi</SheetTitle>
-          <SheetDescription className='sr-only'>Akses halaman menu</SheetDescription>
-        </SheetHeader>
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant='ghost' className='md:hidden'>
+            <AlignJustifyIcon size='1rem' />
+            <span className='sr-only'>Menu</span>
+          </Button>
+        </SheetTrigger>
 
-        <PrivateNavbar />
-      </SheetContent>
-    </Sheet>
+        <SheetContent side='right' className='px-0'>
+          <SheetHeader className='px-4'>
+            <SheetTitle>Menu Aplikasi</SheetTitle>
+            <SheetDescription className='sr-only'>Akses halaman menu</SheetDescription>
+          </SheetHeader>
+
+          <PrivateNavbar />
+        </SheetContent>
+      </Sheet>
+    </Fragment>
   )
 }
