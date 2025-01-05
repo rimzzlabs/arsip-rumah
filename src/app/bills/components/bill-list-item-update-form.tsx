@@ -26,12 +26,12 @@ import { useAction } from 'next-safe-action/hooks'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
-type BillFormUpdateProps = { onClose: () => void } & Pick<
+type BillListItemUpdateForm = { onClose: () => void } & Pick<
   UpdateBillSchema,
   'billId' | 'billName' | 'billNumber' | 'billType' | 'userId'
 >
 
-export function BillFormUpdate(props: BillFormUpdateProps) {
+export function BillListItemUpdateForm(props: BillListItemUpdateForm) {
   let action = useAction(updateBillAction)
   let form = useForm<UpdateBillSchema>({
     defaultValues: { ...props, password: '' },
@@ -107,8 +107,8 @@ export function BillFormUpdate(props: BillFormUpdateProps) {
               <FormControl>
                 <Input
                   {...field}
+                  inputMode='numeric'
                   placeholder='123456789'
-                  inputMode='decimal'
                   onChange={numericOnChange(field.onChange)}
                 />
               </FormControl>
@@ -131,7 +131,17 @@ export function BillFormUpdate(props: BillFormUpdateProps) {
           )}
         />
 
-        <DrawerFooter className='px-0'>
+        <DrawerFooter className='px-0 md:grid md:grid-cols-2 md:gap-2'>
+          <Button
+            size='lg'
+            type='button'
+            variant='secondary'
+            className='max-md:hidden'
+            onClick={props.onClose}
+          >
+            Batalkan
+          </Button>
+
           <Button disabled={disableSubmitButton} type='submit' size='lg' className='w-full'>
             Perbarui tagihan
           </Button>

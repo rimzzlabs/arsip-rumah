@@ -1,26 +1,34 @@
-import { Button } from '@/components/ui/button'
 import { For } from '@/components/ui/for'
 
+import { cn } from '@/lib/utils'
+
+import { PrivateNavbarItem } from './private-navbar-item'
+
 import { ReceiptTextIcon, UserIcon } from 'lucide-react'
-import Link from 'next/link'
+import { match } from 'ts-pattern'
 
 const PRIVATE_NAVBAR = [
-  { label: 'Profil', url: '/account', icon: UserIcon },
+  { label: 'Akun Saya', url: '/account', icon: UserIcon },
   { label: 'Tagihan', url: '/bills', icon: ReceiptTextIcon },
 ]
 
-export function PrivateNavbar() {
+type PrivateNavbarProps = { renderAsButton?: boolean }
+
+export function PrivateNavbar(props: PrivateNavbarProps) {
+  let navbarItems = match(props.renderAsButton)
+    .with(true, () => [PRIVATE_NAVBAR[1], PRIVATE_NAVBAR[0]])
+    .otherwise(() => PRIVATE_NAVBAR)
+
   return (
-    <nav className='grid px-2 py-6'>
+    <nav
+      className={cn(
+        props.renderAsButton ? 'inline-flex items-center gap-x-2 max-md:hidden' : 'grid px-2 py-6',
+      )}
+    >
       <For
-        each={PRIVATE_NAVBAR}
-        render={({ label, url, icon: Icon }) => (
-          <Button size='lg' variant='ghost' className='justify-normal px-4' asChild>
-            <Link href={url}>
-              <Icon size='1em' />
-              {label}
-            </Link>
-          </Button>
+        each={navbarItems}
+        render={(args) => (
+          <PrivateNavbarItem {...args} key={args.url} renderAsButton={props.renderAsButton} />
         )}
       />
     </nav>

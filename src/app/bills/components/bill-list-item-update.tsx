@@ -1,4 +1,12 @@
 import {
+  AlertDialog,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogContent,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import {
   Drawer,
   DrawerContent,
   DrawerDescription,
@@ -11,9 +19,10 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { preventDefault } from '@/lib/utils'
 
 import type { UpdateBillSchema } from '../schema'
-import { BillFormUpdate } from './bill-form-update'
+import { BillListItemUpdateForm } from './bill-list-item-update-form'
 
 import { PenBoxIcon } from 'lucide-react'
+import { Fragment } from 'react'
 
 type BillListItemUpdateProps = { onClose: () => void } & Pick<
   UpdateBillSchema,
@@ -22,26 +31,50 @@ type BillListItemUpdateProps = { onClose: () => void } & Pick<
 
 export function BillListItemUpdate(props: BillListItemUpdateProps) {
   return (
-    <Drawer repositionInputs={false}>
-      <DrawerTrigger asChild>
-        <DropdownMenuItem onSelect={preventDefault} className='text-sm'>
-          <PenBoxIcon size='0.875rem' />
-          Perbarui
-        </DropdownMenuItem>
-      </DrawerTrigger>
+    <Fragment>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <DropdownMenuItem onSelect={preventDefault} className='text-sm'>
+            <PenBoxIcon size='0.875rem' />
+            Perbarui
+          </DropdownMenuItem>
+        </AlertDialogTrigger>
 
-      <DrawerContent className='px-6'>
-        <DrawerHeader className='px-0'>
-          <DrawerTitle>Perbarui Data Tagihan</DrawerTitle>
+        <AlertDialogContent className='px-6'>
+          <AlertDialogHeader className='px-0'>
+            <AlertDialogTitle>Perbarui Data Tagihan</AlertDialogTitle>
 
-          <DrawerDescription>
-            Anda bisa menggunakan fitur ini untuk mengubah data, misal: jika anda melakukan
-            kesalahan seperti salah nomor tagihan
-          </DrawerDescription>
-        </DrawerHeader>
+            <AlertDialogDescription>
+              Anda bisa menggunakan fitur ini untuk mengubah data, misal: jika anda melakukan
+              kesalahan seperti salah nomor tagihan
+            </AlertDialogDescription>
+          </AlertDialogHeader>
 
-        <BillFormUpdate {...props} />
-      </DrawerContent>
-    </Drawer>
+          <BillListItemUpdateForm {...props} />
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <Drawer repositionInputs={false}>
+        <DrawerTrigger asChild>
+          <DropdownMenuItem onSelect={preventDefault} className='text-sm md:hidden'>
+            <PenBoxIcon size='0.875rem' />
+            Perbarui
+          </DropdownMenuItem>
+        </DrawerTrigger>
+
+        <DrawerContent className='px-6'>
+          <DrawerHeader className='px-0'>
+            <DrawerTitle>Perbarui Data Tagihan</DrawerTitle>
+
+            <DrawerDescription>
+              Anda bisa menggunakan fitur ini untuk mengubah data, misal: jika anda melakukan
+              kesalahan seperti salah nomor tagihan
+            </DrawerDescription>
+          </DrawerHeader>
+
+          <BillListItemUpdateForm {...props} />
+        </DrawerContent>
+      </Drawer>
+    </Fragment>
   )
 }

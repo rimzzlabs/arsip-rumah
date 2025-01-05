@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { DrawerClose, DrawerFooter } from '@/components/ui/drawer'
+import { DrawerFooter } from '@/components/ui/drawer'
 import {
   Form,
   FormControl,
@@ -22,7 +22,12 @@ import { useAction } from 'next-safe-action/hooks'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
-type AccountInfoUpdateFormProps = { userId: string; name: string; email: string }
+type AccountInfoUpdateFormProps = {
+  userId: string
+  name: string
+  email: string
+  onClose: () => void
+}
 
 export function AccountInfoUpdateForm(props: AccountInfoUpdateFormProps) {
   let session = useSession()
@@ -46,7 +51,7 @@ export function AccountInfoUpdateForm(props: AccountInfoUpdateFormProps) {
       return toast.error('Data tidak valid')
     }
 
-    const [error] = res.data
+    let [error] = res.data
     if (error) {
       if (error === 'Email sudah terdaftar') form.setError('email', { message: error })
       return toast.error(error)
@@ -54,6 +59,7 @@ export function AccountInfoUpdateForm(props: AccountInfoUpdateFormProps) {
 
     await session.update({ email: values.email, name: values.name })
     toast.success('Berhasil memperbarui data')
+    props.onClose()
   })
 
   return (
@@ -102,11 +108,14 @@ export function AccountInfoUpdateForm(props: AccountInfoUpdateFormProps) {
             Kirim
           </Button>
 
-          <DrawerClose asChild>
-            <Button variant='outline' type='button' disabled={form.formState.isSubmitting}>
-              Batal
-            </Button>
-          </DrawerClose>
+          <Button
+            type='button'
+            variant='outline'
+            onClick={props.onClose}
+            disabled={form.formState.isSubmitting}
+          >
+            Batal
+          </Button>
         </DrawerFooter>
       </form>
     </Form>
